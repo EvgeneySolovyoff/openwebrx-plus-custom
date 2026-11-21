@@ -1073,18 +1073,11 @@ function on_ws_recv(evt) {
                         $('#openwebrx-panel-metadata-wfm').metaPanel().each(function() {
                             this.setEnabled(!!json.value.rds);
                         });
+                        $('#openwebrx-panel-metadata-bcfm').metaPanel().each(function() {
+                            this.setEnabled(!!json.value.rds);
+                        });
                         break;
                     case "metadata":
-                        if (
-                            json['value'] &&
-                            Object.prototype.hasOwnProperty.call(
-                                json['value'],
-                                'wfm_stereo'
-                            )
-                        ) {
-                            window.owrxWfmStereoDetected =
-                                !!json['value']['wfm_stereo'];
-                        }
 
                         $('.openwebrx-meta-panel').metaPanel().each(function(){
                             this.update(json['value']);
@@ -1205,6 +1198,10 @@ function on_ws_recv(evt) {
             case 4:
                 // hd audio data
                 audioEngine.pushHdAudio(data);
+                break;
+            case 6:
+                // hd stereo data
+                audioEngine.pushHdStereo(data);
                 break;
             default:
                 console.warn('unknown type of binary message: ' + type)
@@ -1483,6 +1480,9 @@ function openwebrx_init() {
 
     // Create and run clock
     clock = new Clock($('#openwebrx-clock-utc'));
+
+    // Request screen wake lock
+    WakeLock.enable();
 }
 
 function initSliders() {

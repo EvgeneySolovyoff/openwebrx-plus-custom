@@ -32,7 +32,7 @@
         <link rel="icon" type="image/png" sizes="128x128" href="static/gfx/favicon128.png" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <meta name="msapplication-TileImage" content="mstile-144x144.png">
-        <script src="compiled/receiver.js"></script>
+        <script src="compiled/receiver.js?v=1.2.131-buffer1"></script>
         <link rel="stylesheet" type="text/css" href="static/lib/nanoscroller.css" />
         <link rel="stylesheet" type="text/css" href="static/css/openwebrx.css" />
         <link rel="stylesheet" type="text/css" href="static/css/shortcuts.css" />
@@ -40,7 +40,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9, minimum-scale=0.9, shrink-to-fit=no, user-scalable=no, interactive-widget=overlays-content" />
         <meta name="theme-color" content="#222" />
-        <script src="static/plugins.js?v=20261028-stable-size"></script>
+        <script src="static/plugins.js?v=20261025-gainfix-dig-layout3"></script>
     </head>
     <body onload="openwebrx_init();">
 
@@ -187,6 +187,7 @@
                     </div>
                 </div>
                 <div class="openwebrx-panel openwebrx-meta-panel disabled" id="openwebrx-panel-metadata-wfm" style="display: none;" data-panel-name="metadata-wfm"></div>
+                <div class="openwebrx-panel openwebrx-meta-panel disabled" id="openwebrx-panel-metadata-bcfm" style="display: none;" data-panel-name="metadata-bcfm"></div>
                 <div class="openwebrx-panel openwebrx-meta-panel" id="openwebrx-panel-metadata-hdr" style="display: none;" data-panel-name="metadata-hdr"></div>
                 <div class="openwebrx-panel openwebrx-meta-panel" id="openwebrx-panel-metadata-dab" style="display: none;" data-panel-name="metadata-dab"></div>
                 <div class="openwebrx-panel openwebrx-meta-panel" id="openwebrx-panel-metadata-drm" style="display: none;" data-panel-name="metadata-drm"></div>
@@ -293,7 +294,10 @@
                                 <svg viewBox="0 0 80 80"><use xlink:href="static/gfx/svg-defs.svg#noise-reduce"></use></svg>
                             </div>
                             <input title="Noise reduction level" disabled id="openwebrx-panel-nr" class="openwebrx-panel-slider" type="range" min="-20" max="20" value="0" step="1" onchange="UI.setNR(this.value)" oninput="UI.setNR(this.value)">
-                <div title="NF spectral noise filter on/off" id="openwebrx-nf-toggle" class="openwebrx-button openwebrx-slider-button" onclick="AudioFilterPlugin.toggleNoiseReduction();">
+                            <div style="display:none"><div title="Set waterfall colors to default" id="openwebrx-waterfall-colors-default" class="openwebrx-button openwebrx-slider-button" onclick="Waterfall.setDefaultRange();">
+                                <svg viewBox="0 0 80 80"><use xlink:href="static/gfx/svg-defs.svg#waterfall-default"></use></svg>
+                            </div>
+                            <input title="Waterfall maximum level" id="openwebrx-waterfall-color-max" class="openwebrx-panel-slider" type="range" min="-200" max="100" value="50" step="1" onchange="Waterfall.updateColors(1);"></div><div title="NF spectral noise filter on/off" id="openwebrx-nf-toggle" class="openwebrx-button openwebrx-slider-button" onclick="AudioFilterPlugin.toggleNoiseReduction();">
                     <svg viewBox="0 0 80 80" role="img" aria-label="NF"><g fill="#fff" stroke-width=".767"><path d="m 36.606611,74.237282 -9.008789,0 L 11.11833,30.951149 q 0.659179,3.164062 0.659179,4.96582 l 0,38.320313 -10.0195308,0 0,-68.7744143 9.0087888,0 16.479492,42.4072263 Q 26.58708,44.706032 26.58708,42.904274 l 0,-37.4414063 10.019531,0 0,68.7744143 z"/><path d="M45 5.462868 H79 V14.296 H55.283 V34.75 H74.5 V43.09 H55.283 V74.237282 H45 Z"/></g></svg>
                 </div>
                 <input title="NF noise reduction strength" disabled id="openwebrx-panel-nf" class="openwebrx-panel-slider" type="range" min="0" max="40" value="15" step="1" onchange="AudioFilterPlugin.setNoiseReductionStrength(this.value)" oninput="AudioFilterPlugin.setNoiseReductionStrength(this.value)">

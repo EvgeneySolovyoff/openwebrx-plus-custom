@@ -10,16 +10,15 @@ if (typeof LS !== "undefined") {
     if (LS.has("ui_spectrum") === false) LS.save("ui_spectrum", true);
 }
 
-Plugins.load(window.location.origin + "/static/plugins/receiver/rig_skin_v88/rig_skin.js?v=rig-stable-size-20261028").then(function () {
-    if (typeof UI !== "undefined" && typeof UI.setTheme === "function") {
+Plugins.load(window.location.origin + "/static/plugins/receiver/rig_skin_v88/rig_skin.js?v=drms-sat-20261025g-stereo3").then(function () {
+    if (rigHadSavedTheme === false && typeof UI !== "undefined" && typeof UI.setTheme === "function") {
         UI.setTheme("rig");
     }
-    if (typeof UI !== "undefined" && typeof UI.setWfTheme === "function") {
+    if (typeof LS !== "undefined" && LS.has("wf_theme") === false && typeof UI !== "undefined" && typeof UI.setWfTheme === "function") {
         UI.setWfTheme("rig");
     }
 });
 
-// NF: Joerg audio_filter spectral noise reduction on the repurposed waterfall-max controls.
-Plugins.load(window.location.origin + "/static/plugins/receiver/audio_filter/audio_filter.js?v=nf-level-default15-20261028").then(function () {
-    return Plugins.load(window.location.origin + "/static/plugins/receiver/audio_filter/nf_bridge.js?v=nf-disabled-20261028");
+Plugins.load(window.location.origin + "/static/plugins/receiver/audio_filter/audio_filter.js").then(function () {
+    return Plugins.load(window.location.origin + "/static/plugins/receiver/audio_filter/nf_bridge.js");
 });

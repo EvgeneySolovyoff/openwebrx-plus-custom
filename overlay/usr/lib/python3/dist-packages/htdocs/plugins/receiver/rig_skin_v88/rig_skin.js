@@ -9,7 +9,7 @@
  * knob step follows the tuning step selector.
  */
 
-Plugins.rig_skin._version = '0.10.14';
+Plugins.rig_skin._version = '0.10.14-dig3';
 Plugins.rig_skin._author = 'SV1DOD / HB9ISH';
 
 // where this script was loaded from, for fetching companion files
@@ -3553,22 +3553,49 @@ Plugins.rig_skin.createSignalInfo = function ($container) {
 
 
         var stereoLabel = '';
-        if (
-            typeof UI !== 'undefined' &&
-            typeof UI.getModulation === 'function' &&
-            UI.getModulation() === 'wfm'
-        ) {
-            stereoLabel = window.owrxWfmStereoDetected ? 'STEREO' : 'MONO';
+        var fmMode = typeof UI !== 'undefined' && typeof UI.getModulation === 'function' ? UI.getModulation() : '';
+        if (fmMode === 'wfm') stereoLabel = 'MONO';
+        if (fmMode === 'bcfm' && typeof audioEngine !== 'undefined' && audioEngine && audioEngine.audioNode && audioEngine.audioContext) {
+            try {
+                var st = Plugins.rig_skin._stereoMonitor;
+                if (!st || st.source !== audioEngine.audioNode) {
+                    if (st) { try { st.source.disconnect(st.split); } catch (e) {} }
+                    var ctx = audioEngine.audioContext;
+                    st = {source: audioEngine.audioNode, split: ctx.createChannelSplitter(2), left: ctx.createAnalyser(), right: ctx.createAnalyser(), active: false, quiet: 0};
+                    st.left.fftSize = st.right.fftSize = 2048;
+                    st.l = new Float32Array(2048); st.r = new Float32Array(2048);
+                    st.source.connect(st.split); st.split.connect(st.left, 0); st.split.connect(st.right, 1); st.silent = ctx.createGain(); st.silent.gain.value = 0; st.left.connect(st.silent); st.right.connect(st.silent); st.silent.connect(ctx.destination);
+                    Plugins.rig_skin._stereoMonitor = st;
+                }
+                st.left.getFloatTimeDomainData(st.l); st.right.getFloatTimeDomainData(st.r);
+                var sum = 0, diff = 0;
+                for (var si = 0; si < st.l.length; si++) { var a = st.l[si] + st.r[si], b = st.l[si] - st.r[si]; sum += a*a; diff += b*b; }
+                var ratio = diff / Math.max(sum, 0.000001);
+                if (sum > 0.001 && ratio > 0.012) { st.active = true; st.quiet = 0; }
+                else if (++st.quiet >= 6) st.active = false;
+                if (st.active) stereoLabel = 'STEREO';
+            } catch (e) { /* Indicator must never interrupt audio. */ }
         }
 
-        var txt = parts.join('  ');
-        if ($extra._shown !== txt) {
-            $extra._shown = txt;
-            $extra.text(txt);
+        var txt = parts.join('   ');
+        var shown = txt + '|' + stereoLabel;
+
+        if ($extra._shown !== shown) {
+            $extra._shown = shown;
+            $extra.empty();
+            $extra.append(document.createTextNode(txt));
+
+            if (stereoLabel) {
+                $extra.append(
+                    $('<span>')
+                        .addClass(
+                            'owrx-rig-stereo-state' +
+                            (stereoLabel === 'STEREO' ? ' active' : '')
+                        )
+                        .text('   ' + stereoLabel)
+                );
+            }
         }
-        $stereo.text(stereoLabel)
-            .toggleClass('active', stereoLabel === 'STEREO')
-            .toggle(!!stereoLabel);
     }
 
     Plugins.rig_skin._updateInfo = update;

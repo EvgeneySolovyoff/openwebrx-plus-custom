@@ -24,16 +24,10 @@ Plugins._enable_debug = false; // print debug to the console
 Plugins.load = async function (name) {
     var path = 'static/plugins/' + Plugins._type + "/" + name + "/";
     var remote = false;
-    var script_query = '';
 
     // check if we are loading an url
     if (name.toLowerCase().startsWith('https://') || name.toLowerCase().startsWith('http://')) {
         path = name;
-        var query_index = path.indexOf('?');
-        if (query_index !== -1) {
-            script_query = path.slice(query_index);
-            path = path.slice(0, query_index);
-        }
         name = path.split('/').pop().split('.').slice(0, -1);
         path = path.split('/').slice(0, -1).join('/') + '/';
         remote = true;
@@ -46,8 +40,8 @@ Plugins.load = async function (name) {
 
     Plugins._debug(Plugins._banner(name) + 'loading.');
 
-    var script_src = path + name + ".js" + script_query;
-    var style_src = path + name + '.css';
+    var script_src = path + name + ".js"; if (String(name) === "rig_skin" && path.indexOf("rig_skin_v88/") !== -1) script_src += "?v=dig-layout3";
+    var style_src = path + name + '.css'; if (String(name) === "rig_skin" && path.indexOf("rig_skin_v88/") !== -1) style_src += "?v=dig-layout3";
 
     // init plugin object with defaults
     Plugins[name] = {
@@ -108,7 +102,7 @@ Plugins.init = function () {
     Plugins._debug("Loading " + Plugins._type + " plugins.");
 
     // load the init.js for the {type}... user should load their plugins there.
-    Plugins._load_script('static/plugins/' + Plugins._type + "/init.js?v=20261028-nf-slider").then(function () {
+    Plugins._load_script('static/plugins/' + Plugins._type + "/init.js?v=20261025-gainfix-dig-layout3").then(function () {
         Plugins._initialized = true;
     }).catch(function () {
         Plugins._debug('no plugins to load.');

@@ -1,6 +1,12 @@
 # OpenWebRX+ — доработки приёмника
 
-Набор изменений для OpenWebRX+ 1.2.127: серверный код и интерфейс, сохранённые в виде файлов для установки поверх соответствующей версии. Это не самостоятельный дистрибутив. Перед применением сравните файлы со своей установкой и сделайте резервную копию: замена файлов другой версии может нарушить работу.
+Набор изменений для OpenWebRX+ 1.2.131: серверный код и интерфейс, сохранённые в виде файлов для установки поверх соответствующей версии. Это не самостоятельный дистрибутив. Перед применением сравните файлы со своей установкой и сделайте резервную копию: замена файлов другой версии может нарушить работу.
+
+## Обновление от 21 ноября 2026
+
+Сохранены файлы действующей установки OpenWebRX+ 1.2.131 на Raspberry Pi: восстановленный интерфейс RIG с кнопками RUSW, DRMS, шумоподавлением и скрытием спектра; размещение DIG и выбора цифрового режима в строке HDR; штатный BCFM-стерео тракт и индикатор стерео; изменения буферизации звука. Индикатор оценивает различия каналов, а не наличие пилот-тона. Эффективность буферизации при длительном прослушивании требует проверки. Подробности — в [истории изменений](CHANGELOG.md).
+
+Сохранённые файлы скопированы с работающей установки; остальные файлы overlay не обязательно обновлены для этой версии. Перед переносом обязательно сравните их с целевой установкой и создайте резервную копию.
 
 ## Что изменено
 
@@ -20,7 +26,7 @@
 
 ## Состав
 
-В каталоге overlay пути соответствуют корню Linux; включены изменённые файлы OpenWebRX+ и используемые плагины. Настройки сервера, файлы пользователей, ключи доступа и сетевые реквизиты в проект не включены. Пакеты-зависимости устанавливаются отдельно. Проверено на Debian с OpenWebRX+ 1.2.127; на других версиях совместимость не проверялась.
+В каталоге overlay пути соответствуют корню Linux; включены изменённые файлы OpenWebRX+ и используемые плагины. Настройки сервера, файлы пользователей, ключи доступа и сетевые реквизиты в проект не включены. Пакеты-зависимости устанавливаются отдельно. Проверено на Debian с OpenWebRX+ 1.2.131; на других версиях совместимость не проверялась.
 
 Перед ручным переносом изучите содержимое и сравните его с установленной версией. Изменения серверных Python-файлов требуют перезапуска службы OpenWebRX+, а обновление браузерных файлов — обновления страницы с очисткой кэша. Автоматическая установка не предусмотрена.
 
@@ -52,7 +58,11 @@
 
 ## English
 
-This repository contains customizations for **OpenWebRX+ 1.2.127**, captured from a working Debian installation. It is an overlay of modified server and interface files, not a standalone distribution. Review the files against your installation and make a backup before applying them; replacing files from another version may break the receiver.
+This repository contains customizations for **OpenWebRX+ 1.2.131**, captured from a working Debian installation. It is an overlay of modified server and interface files, not a standalone distribution. Review the files against your installation and make a backup before applying them; replacing files from another version may break the receiver.
+
+### November 21, 2026 update
+
+Saved files from the running OpenWebRX+ 1.2.131 Raspberry Pi installation, including restored RIG controls, DIG layout, the built-in BCFM stereo path, a channel-difference stereo indicator, and audio buffering changes. Long-term buffering performance still needs listening tests. Other overlay files are not necessarily updated for this version; compare before applying. See [CHANGELOG.md](CHANGELOG.md).
 
 ### Customizations
 
@@ -68,7 +78,7 @@ The screenshots above show the running receiver. SAT tracking is part of the ups
 
 ### Project layout and compatibility
 
-Paths under `overlay/` mirror the Linux filesystem and include modified OpenWebRX+ files and plugins. Server configuration, user files, access keys and NAS network details are not included. Install dependencies separately. The overlay was used on Debian with OpenWebRX+ 1.2.127; compatibility with other versions has not been tested.
+Paths under `overlay/` mirror the Linux filesystem and include modified OpenWebRX+ files and plugins. Server configuration, user files, access keys and NAS network details are not included. Install dependencies separately. The overlay was used on Debian with OpenWebRX+ 1.2.131; compatibility with other versions has not been tested.
 
 Compare the overlay with the installed version before manually applying it. Server-side Python changes require an OpenWebRX+ service restart; browser files may require a hard refresh. No automatic installer is included.
 
